@@ -1,0 +1,79 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+mqtt:
+  - light:
+      name: "TV LED 1"
+      state_topic: "TVLeds/light_1/status"
+      command_topic: "TVLeds/light_1/switch"
+      brightness_state_topic: "TVLeds/light_1/brightness/status"
+      brightness_command_topic: "TVLeds/light_1/brightness/set"
+      rgb_state_topic: "TVLeds/light_1/rgb/status"
+      rgb_command_topic: "TVLeds/light_1/rgb/set"
+      state_value_template: "{{ value_json.set }}" 
+      brightness_value_template: "{{ value_json.brightness }}"
+      rgb_value_template: "{{ value_json.rgb | join(',') }}"
+      qos: 0
+      payload_on: "ON"
+      payload_off: "OFF"
+      optimistic: false
+      effect_command_template: "TVLeds/light_1/effect/set"
+      effect_list: 
+        - Fill
+        - Mood
+        - Pulse
+        - Ambient
+        - Rainbow
+  - light:
+      name: "TV LED 2"
+      state_topic: "TVLeds/light_2/status"
+      command_topic: "TVLeds/light_2/switch"
+      brightness_state_topic: "TVLeds/light_2/brightness/status"
+      brightness_command_topic: "TVLeds/light_2/brightness/set"
+      rgb_state_topic: "TVLeds/light_2/rgb/status"
+      rgb_command_topic: "TVLeds/light_2/rgb/set"
+      state_value_template: "{{ value_json.set }}" 
+      brightness_value_template: "{{ value_json.brightness }}"
+      rgb_value_template: "{{ value_json.rgb | join(',') }}"
+      qos: 0
+      payload_on: "ON"
+      payload_off: "OFF"
+      optimistic: false
+  - light:
+      name: "TV LED 3"
+      state_topic: "TVLeds/light_3/status"
+      command_topic: "TVLeds/light_3/switch"
+      brightness_state_topic: "TVLeds/light_3/brightness/status"
+      brightness_command_topic: "TVLeds/light_3/brightness/set"
+      rgb_state_topic: "TVLeds/light_3/rgb/status"
+      rgb_command_topic: "TVLeds/light_3/rgb/set"
+      state_value_template: "{{ value_json.set }}" 
+      brightness_value_template: "{{ value_json.brightness }}"
+      rgb_value_template: "{{ value_json.rgb | join(',') }}"
+      qos: 0
+      payload_on: "ON"
+      payload_off: "OFF"
+      optimistic: false
+  - light:
+      name: "TV LED 4"
+      state_topic: "TVLeds/light_4/status"
+      command_topic: "TVLeds/light_4/switch"
+      brightness_state_topic: "TVLeds/light_4/brightness/status"
+      brightness_command_topic: "TVLeds/light_4/brightness/set"
+      rgb_state_topic: "TVLeds/light_4/rgb/status"
+      rgb_command_topic: "TVLeds/light_4/rgb/set"
+      state_value_template: "{{ value_json.set }}" 
+      brightness_value_template: "{{ value_json.brightness }}"
+      rgb_value_template: "{{ value_json.rgb | join(',') }}"
+      qos: 0
+      payload_on: "ON"
+      payload_off: "OFF"
+      optimistic: false
