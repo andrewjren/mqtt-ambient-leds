@@ -11,7 +11,7 @@
 		"url":"https://github.com/andrewjren/mqtt-ambient-leds"
     },
     "components": {
-		"tvleds0001": {
+		"tv_led_1": {
 			"platform":"light",
 			"availability": {
 				"topic":"TVLeds/light_1/availability"
@@ -28,7 +28,8 @@
 			"payload_on": "ON",
       		"payload_off": "OFF",
 			"effect_command_template": "TVLeds/light_1/effect/set",
-			"effect_list": ["Fill", "Mood","Pulse","Ambient","Rainbow"]
+			"effect_list": ["Fill", "Mood","Pulse","Ambient","Rainbow"],
+			"unique_id":"tvleds0001"
 		}
 	}
 }
