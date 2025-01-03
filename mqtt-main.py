@@ -4,6 +4,7 @@ from threading import Thread, Event
 import time
 from datetime import datetime
 import picamera
+import ssl 
 
 from tvleds import *
 
@@ -153,6 +154,8 @@ def on_connect(client, userdata, flags, reason_code, properties):
     client.subscribe("TVLeds/light_1/rgb/set")
     client.subscribe("TVLeds/light_1/effect/set")
 
+    payload = "{\"device\":{\"identifiers\":\"in8401_office\",\"manufacturer\":\"INSTAR Deutschland GmbH\",\"model\":\"INSTAR 2k+ IN-8401 WLAN\",\"name\":\"IN-8401 2k+ Office\",\"configuration_url\":\"http://192.168.2.120:80\"},\"availability\":{\"topic\":\"cameras/120/status/testament\",\"payload_available\":\"{\\\"val\\\":\\\"alive\\\"}\",\"payload_not_available\":\"{\\\"val\\\":\\\"dead\\\"}\"},\"object_id\":\"in8401_office_alarm_area_red\",\"unique_id\":\"in8401_office_alarm_area_red\",\"name\":\"Alarm Area Red\",\"icon\":\"mdi:camera-metering-matrix\",\"command_topic\":\"cameras/120/alarm/areas/red/enable\",\"payload_on\":\"{\\\"val\\\":\\\"1\\\"}\",\"payload_off\":\"{\\\"val\\\":\\\"0\\\"}\",\"state_topic\":\"cameras/120/status/alarm/areas/red/enable\",\"state_on\":1,\"state_off\":0,\"value_template\":\"{{ value_json.val}}\",\"qos\":1}"
+    client.publish("homeassistant/device/TVLeds/light_1/config")
     client.publish("TVLeds/light_1/status", "OFF", qos=0)
 
 def on_message(client, userdata, msg):
@@ -199,7 +202,9 @@ def on_message(client, userdata, msg):
 mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message 
-
-mqttc.connect("homeassistant", 1883, 60)
+mqttc.username_pw_set("pitv","pitvledlogin")
+mqttc.tls_set(certfile=None,keyfile=None,cert_reqs=ssl.CERT_REQUIRED)
+#mqttc.tls_set()
+mqttc.connect("homeassistant.local", 1883, 60)
 
 mqttc.loop_forever()

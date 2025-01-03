@@ -9,7 +9,7 @@ from .camera_output import CameraOutput
 # Colors
 class Color:
 
-    def __init(self, i_red, i_green, i_blue):
+    def __init__(self, i_red, i_green, i_blue):
         self.red = i_red
         self.green = i_green
         self.blue = i_blue
