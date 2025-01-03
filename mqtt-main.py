@@ -124,7 +124,7 @@ def begin_task(task):
         ambient_leds.clear_leds()
 
     if task == 'fill':
-        ambient_leds.fill_num(1)
+        ambient_leds.fill(1)
 
     elif task == 'mood':
         t = threading.Thread(name='Mood Thread', target=task_mood)
@@ -162,7 +162,7 @@ def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
     if msg.topic == "TVLeds/light_1/switch":
-        light_switch = msg.payload
+        light_switch = str(msg.payload.decode("utf-8"))
         if light_switch == "OFF":
             begin_task('off')
             client.publish("TVLeds/light_1/status", "OFF", qos=0)
