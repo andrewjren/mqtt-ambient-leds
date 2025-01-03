@@ -162,7 +162,7 @@ class AmbientLEDs:
 
     # set all LEDs to be dark
     def clear_leds(self):
-        self.pixels.fill((0,0,0))
+        self.fill((0,0,0))
 
     # 
     def setup(self):
