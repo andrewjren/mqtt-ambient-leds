@@ -5,9 +5,6 @@
 		"model":"Custom TV LEDs",
 		"name":"TV LEDs"
     },
-    "availability": {
-		"topic":"TVLeds/availability"
-    },
     "origin": {
 		"name":"tvled_mqtt",
 		"sw":"1.0",
