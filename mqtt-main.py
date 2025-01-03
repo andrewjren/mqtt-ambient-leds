@@ -220,7 +220,10 @@ mqttc.on_message = on_message
 #mqttc.tls_set(certfile=None,keyfile=None,cert_reqs=ssl.CERT_REQUIRED)
 #mqttc.tls_set()
 
+# publish discovery message 
 mqttc.publish("homeassistant/device/TVLeds/config", json.dumps(discovery), qos=0)
-#mqttc.publish("TVLeds/light_1/status", "OFF", qos=0)
+
+# set availibility
+mqttc.publish("TVLeds/light_1/availability","online",qos=0)
 
 mqttc.loop_forever()
