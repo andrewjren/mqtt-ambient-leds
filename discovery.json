@@ -1,26 +1,37 @@
 {
     "device": {
         "identifiers":"tvleds0000",
-	"manufacturer":"Ren",
-	"model":"Custom TV LEDs",
-	"name":"TV LEDs"
+		"manufacturer":"Ren",
+		"model":"Custom TV LEDs",
+		"name":"TV LEDs"
     },
     "availability": {
-	"topic":"TVLeds/status"
+		"topic":"TVLeds/availability"
     },
     "origin": {
-	"name":"tvled_mqtt",
-	"sw":"1.0",
-	"url":"https://github.com/andrewjren/mqtt-ambient-leds"
+		"name":"tvled_mqtt",
+		"sw":"1.0",
+		"url":"https://github.com/andrewjren/mqtt-ambient-leds"
     },
     "components": {
-	"tvleds0001": {
-	    "platform":"light",
-	    "availability": {
-		"topic":"TVLeds/light_1/status"
-	    },
-	    "command_topic":"TVLeds/light_1/set"
+		"tvleds0001": {
+			"platform":"light",
+			"availability": {
+				"topic":"TVLeds/light_1/availability"
+			},
+			"command_topic":"TVLeds/light_1/switch",
+			"state_topic":"TVLeds/light_1/status",
+			"brightness_state_topic":"TVLeds/light_1/brightness/status",
+			"brightness_command_topic":"TVLeds/light_1/brightness/set",
+			"rgb_state_topic": "TVLeds/light_1/rgb/status",
+			"rgb_command_topic": "TVLeds/light_1/rgb/set",
+			"state_value_template": "{{ value_json.set }}", 
+			"brightness_value_template": "{{ value_json.brightness }}",
+			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
+			"payload_on": "ON",
+      		"payload_off": "OFF",
+			"effect_command_template": "TVLeds/light_1/effect/set",
+			"effect_list": ["Fill", "Mood","Pulse","Ambient","Rainbow"]
+		}
 	}
-    },
-    "qos":0
 }
