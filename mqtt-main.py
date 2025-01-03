@@ -160,9 +160,10 @@ def on_connect(client, userdata, flags, reason_code, properties):
 def on_message(client, userdata, msg):
     global ambient_leds, current_effect
     print(msg.topic+" "+str(msg.payload))
+    payload_str = msg.payload.decode("utf-8")
 
     if msg.topic == "TVLeds/light_1/switch":
-        light_switch = str(msg.payload.decode("utf-8"))
+        light_switch = payload_str
         if light_switch == "OFF":
             begin_task('off')
             client.publish("TVLeds/light_1/status", "OFF", qos=0)
@@ -171,7 +172,7 @@ def on_message(client, userdata, msg):
             client.publish("TVLeds/light_1/status", "ON", qos=0)
 
     elif msg.topic == "TVLeds/light_1/brightness/set":
-        light_brightness = msg.payload
+        light_brightness = int(payload_str)
         H, S, I = ambient_leds.rgb2hsi(ambient_leds.colors[0].red, ambient_leds.colors[0].green, ambient_leds.colors[0].blue)
         R, G, B = ambient_leds.hsi2rgb(H, S, light_brightness)
 
@@ -180,14 +181,14 @@ def on_message(client, userdata, msg):
         client.publish("TVLeds/light_1/brightness/status", f"{light_brightness}", qos=0)
 
     elif msg.topic == "TVLeds/light_1/rgb/set":
-        light_rgb = msg.payload
+        light_rgb = payload_str
 
         red, green, blue = light_rgb.split(',')
         ambient_leds.colors[0].set(red, green, blue)
         client.publish("TVLeds/light_1/rgb/status", f"{red},{green},{blue}", qos=0)
 
     elif msg.topic == "TVLeds/light_1/effect/set":
-        light_effect = msg.payload
+        light_effect = payload_str
         
         if current_effect != light_effect:
             current_effect = light_effect 
@@ -217,8 +218,6 @@ mqttc.connect(host = mqtt_server_host,
 
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message 
-#mqttc.tls_set(certfile=None,keyfile=None,cert_reqs=ssl.CERT_REQUIRED)
-#mqttc.tls_set()
 
 # publish discovery message 
 mqttc.publish("homeassistant/device/TVLeds/config", json.dumps(discovery), qos=0)
@@ -227,3 +226,6 @@ mqttc.publish("homeassistant/device/TVLeds/config", json.dumps(discovery), qos=0
 mqttc.publish("TVLeds/light_1/availability","online",qos=0)
 
 mqttc.loop_forever()
+
+# set availibility
+mqttc.publish("TVLeds/light_1/availability","offline",qos=0)
