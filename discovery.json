@@ -1,0 +1,26 @@
+{
+    "device": {
+        "identifiers":"tvleds0000",
+	"manufacturer":"Ren",
+	"model":"Custom TV LEDs",
+	"name":"TV LEDs"
+    },
+    "availability": {
+	"topic":"TVLeds/status"
+    },
+    "origin": {
+	"name":"tvled_mqtt",
+	"sw":"1.0",
+	"url":"https://github.com/andrewjren/mqtt-ambient-leds"
+    },
+    "components": {
+	"tvleds0001": {
+	    "platform":"light",
+	    "availability": {
+		"topic":"TVLeds/light_1/status"
+	    },
+	    "command_topic":"TVLeds/light_1/set"
+	}
+    },
+    "qos":0
+}

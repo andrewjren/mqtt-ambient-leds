@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 import picamera
 import ssl 
+import json
 
 from tvleds import *
 
@@ -197,6 +198,10 @@ def on_message(client, userdata, msg):
 
 
 # Create MQTT Client 
+with open('discovery.json') as f:
+    discovery = json.load(f)
+    print(discovery)
+
 mqtt_client_id = "tvled_client"
 mqtt_transport = "tcp"
 mqtt_server_host = "homeassistant.local"
@@ -207,7 +212,7 @@ mqttc = mqtt.Client(client_id=mqtt_client_id, protocol = mqtt.MQTTv5, transport 
 mqttc.username_pw_set("pitv","pitvledlogin")
 mqttc.connect(host = mqtt_server_host,
               port = mqtt_server_port,
-              keep_alive = mqtt_keepalive,
+              keepalive = mqtt_keepalive,
               properties = None)
 
 mqttc.on_connect = on_connect
@@ -215,8 +220,7 @@ mqttc.on_message = on_message
 #mqttc.tls_set(certfile=None,keyfile=None,cert_reqs=ssl.CERT_REQUIRED)
 #mqttc.tls_set()
 
-#payload = "{\"device\":{\"identifiers\":\"tv_leds\",\"manufacturer\":\"ren\",\"name\":\"TVLeds\"},\"availability\":{\"topic\":\"TVLeds/light_1/status\"},\"object_id\":\"tvled101\",\"unique_id\":\"tvled001\",\"name\":\"TV LEDs\",\"command_topic\":\"TVLeds/light_1/switch\",\"payload_on\":\"{\\\"val\\\":\\\"ON\\\"}\",\"payload_off\":\"{\\\"val\\\":\\\"OFF\\\"}\",\"state_topic\":\"TVLeds/light_1/status\",\"state_on\":ON,\"state_off\":OFF,\"value_template\":\"{{ value_json.val}}\",\"qos\":0}"
-#mqttc.publish("homeassistant/device/TVLeds/light_1/config", payload, qos=0)
+mqttc.publish("homeassistant/device/TVLeds/config", json.dumps(discovery), qos=0)
 #mqttc.publish("TVLeds/light_1/status", "OFF", qos=0)
 
 mqttc.loop_forever()
