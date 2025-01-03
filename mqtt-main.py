@@ -154,10 +154,6 @@ def on_connect(client, userdata, flags, reason_code, properties):
     client.subscribe("TVLeds/light_1/rgb/set")
     client.subscribe("TVLeds/light_1/effect/set")
 
-    payload = "{\"device\":{\"identifiers\":\"tv_leds\",\"manufacturer\":\"ren\",\"name\":\"TVLeds\"},\"availability\":{\"topic\":\"TVLeds/light_1/status\"},\"object_id\":\"tvled101\",\"unique_id\":\"tvled001\",\"name\":\"TV LEDs\",\"command_topic\":\"TVLeds/light_1/switch\",\"payload_on\":\"{\\\"val\\\":\\\"ON\\\"}\",\"payload_off\":\"{\\\"val\\\":\\\"OFF\\\"}\",\"state_topic\":\"TVLeds/light_1/status\",\"state_on\":ON,\"state_off\":OFF,\"value_template\":\"{{ value_json.val}}\",\"qos\":0}"
-    client.publish("homeassistant/device/TVLeds/light_1/config", payload, qos=0)
-    client.publish("TVLeds/light_1/status", "OFF", qos=0)
-
 def on_message(client, userdata, msg):
     global ambient_leds, current_effect
     print(msg.topic+" "+str(msg.payload))
@@ -206,5 +202,9 @@ mqttc.username_pw_set("pitv","pitvledlogin")
 mqttc.tls_set(certfile=None,keyfile=None,cert_reqs=ssl.CERT_REQUIRED)
 #mqttc.tls_set()
 mqttc.connect("homeassistant.local", 1883, 60)
+
+payload = "{\"device\":{\"identifiers\":\"tv_leds\",\"manufacturer\":\"ren\",\"name\":\"TVLeds\"},\"availability\":{\"topic\":\"TVLeds/light_1/status\"},\"object_id\":\"tvled101\",\"unique_id\":\"tvled001\",\"name\":\"TV LEDs\",\"command_topic\":\"TVLeds/light_1/switch\",\"payload_on\":\"{\\\"val\\\":\\\"ON\\\"}\",\"payload_off\":\"{\\\"val\\\":\\\"OFF\\\"}\",\"state_topic\":\"TVLeds/light_1/status\",\"state_on\":ON,\"state_off\":OFF,\"value_template\":\"{{ value_json.val}}\",\"qos\":0}"
+mqttc.publish("homeassistant/device/TVLeds/light_1/config", payload, qos=0)
+mqttc.publish("TVLeds/light_1/status", "OFF", qos=0)
 
 mqttc.loop_forever()
