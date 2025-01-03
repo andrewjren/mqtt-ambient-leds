@@ -27,7 +27,9 @@
 			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
 			"payload_on": "ON",
       		"payload_off": "OFF",
-			"effect_command_template": "TVLeds/light_1/effect/set",
+			"effect_command_topic":"TVLeds/light_1/effect/set",
+			"effect_state_topic":"TVLeds/light_1_/effect/status",
+			"effect_value_template":"{{ value_json.effect.fx }}",
 			"effect_list": ["Fill", "Mood","Pulse","Ambient","Rainbow"],
 			"unique_id":"tvleds0001"
 		}

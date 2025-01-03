@@ -16,7 +16,7 @@ ambient_leds = AmbientLEDs()
 
 # Threading Setup
 threads = []
-current_effect = 'fill'
+current_effect = 'Fill'
 
 # use as signal to stop threads
 stop_thread = Event() 
@@ -123,24 +123,24 @@ def begin_task(task):
     if task == 'off':
         ambient_leds.clear_leds()
 
-    if task == 'fill':
+    elif task == 'Fill':
         ambient_leds.fill(1)
 
-    elif task == 'mood':
+    elif task == 'Mood':
         t = threading.Thread(name='Mood Thread', target=task_mood)
         t.start()
         threads.append(t)
 
-    elif task == 'pulse':
+    elif task == 'Pulse':
         t = threading.Thread(name='Pulse Thread', target=task_pulse)
         t.start()
         threads.append(t)
 
-    elif task == 'ambient':
+    elif task == 'Ambient':
         t = threading.Thread(name='Ambient Thread', target=task_ambient)
         t.start()
         threads.append(t)
-    elif task == 'rainbow':
+    elif task == 'Rainbow':
         t = threading.Thread(name='Rainbow Thread', target=task_rainbow)
         t.start()
         threads.append(t)
@@ -183,7 +183,7 @@ def on_message(client, userdata, msg):
     elif msg.topic == "TVLeds/light_1/rgb/set":
         light_rgb = payload_str
 
-        red, green, blue = light_rgb.split(',')
+        red, green, blue = [int(x) for x in light_rgb.split(',')]
         ambient_leds.colors[0].set(red, green, blue)
         client.publish("TVLeds/light_1/rgb/status", f"{red},{green},{blue}", qos=0)
 
@@ -225,7 +225,9 @@ mqttc.publish("homeassistant/device/TVLeds/config", json.dumps(discovery), qos=0
 # set availibility
 mqttc.publish("TVLeds/light_1/availability","online",qos=0)
 
-mqttc.loop_forever()
-
-# set availibility
-mqttc.publish("TVLeds/light_1/availability","offline",qos=0)
+try:
+    mqttc.loop_forever()
+except KeyboardInterrupt:
+    print('ending')
+    mqttc.publish("TVLeds/light_1/availability","offline",qos=0)
+    exit(0) 

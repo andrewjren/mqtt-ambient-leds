@@ -162,7 +162,8 @@ class AmbientLEDs:
 
     # set all LEDs to be dark
     def clear_leds(self):
-        self.fill((0,0,0))
+        self.pixels.fill((0,0,0))
+        self.pixels.show()
 
     # 
     def setup(self):
@@ -236,7 +237,8 @@ class AmbientLEDs:
 
             # convert to rgb, then fill leds
             r,g,b = self.hsi2rgb(self.curr_hue,self.curr_saturation,self.curr_intensity)
-            self.fill(r,g,b)
+            self.colors[0].set(r,g,b)
+            self.fill(1)
             self.mood_count = self.mood_count + 1
 
             # if count is reached, get new HSI target value
@@ -270,7 +272,8 @@ class AmbientLEDs:
         # convert to rgb, then fill leds
         r,g,b = self.hsi2rgb(self.curr_hue,self.curr_saturation,self.curr_intensity)
 
-        self.fill(r,g,b)
+        self.colors[0].set(r,g,b)
+        self.fill(1)
 
         self.pulse_count = self.pulse_count + 1
 
