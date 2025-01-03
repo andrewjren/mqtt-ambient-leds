@@ -154,8 +154,8 @@ def on_connect(client, userdata, flags, reason_code, properties):
     client.subscribe("TVLeds/light_1/rgb/set")
     client.subscribe("TVLeds/light_1/effect/set")
 
-    payload = "{\"device\":{\"identifiers\":\"in8401_office\",\"manufacturer\":\"INSTAR Deutschland GmbH\",\"model\":\"INSTAR 2k+ IN-8401 WLAN\",\"name\":\"IN-8401 2k+ Office\",\"configuration_url\":\"http://192.168.2.120:80\"},\"availability\":{\"topic\":\"cameras/120/status/testament\",\"payload_available\":\"{\\\"val\\\":\\\"alive\\\"}\",\"payload_not_available\":\"{\\\"val\\\":\\\"dead\\\"}\"},\"object_id\":\"in8401_office_alarm_area_red\",\"unique_id\":\"in8401_office_alarm_area_red\",\"name\":\"Alarm Area Red\",\"icon\":\"mdi:camera-metering-matrix\",\"command_topic\":\"cameras/120/alarm/areas/red/enable\",\"payload_on\":\"{\\\"val\\\":\\\"1\\\"}\",\"payload_off\":\"{\\\"val\\\":\\\"0\\\"}\",\"state_topic\":\"cameras/120/status/alarm/areas/red/enable\",\"state_on\":1,\"state_off\":0,\"value_template\":\"{{ value_json.val}}\",\"qos\":1}"
-    client.publish("homeassistant/device/TVLeds/light_1/config")
+    payload = "{\"device\":{\"identifiers\":\"tv_leds\",\"manufacturer\":\"ren\",\"name\":\"TVLeds\"},\"availability\":{\"topic\":\"TVLeds/light_1/status\"},\"object_id\":\"tvled101\",\"unique_id\":\"tvled001\",\"name\":\"TV LEDs\",\"command_topic\":\"TVLeds/light_1/switch\",\"payload_on\":\"{\\\"val\\\":\\\"ON\\\"}\",\"payload_off\":\"{\\\"val\\\":\\\"OFF\\\"}\",\"state_topic\":\"TVLeds/light_1/status\",\"state_on\":ON,\"state_off\":OFF,\"value_template\":\"{{ value_json.val}}\",\"qos\":0}"
+    client.publish("homeassistant/device/TVLeds/light_1/config", payload, qos=0)
     client.publish("TVLeds/light_1/status", "OFF", qos=0)
 
 def on_message(client, userdata, msg):
