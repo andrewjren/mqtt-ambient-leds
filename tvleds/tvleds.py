@@ -426,7 +426,7 @@ class AmbientLEDs:
         i = (R+G+B)/(3*255.0)
         
         H = math.degrees(h)
-        S = s*100
+        S = s
         I = i
 
         return H,S,I
