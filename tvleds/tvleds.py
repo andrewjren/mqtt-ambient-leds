@@ -119,17 +119,19 @@ class AmbientLEDs:
     # set light quadrant
     def set_light(self, light_num, set_light=False):
 
-        if light_num >= 0 and light_num <= 4:
-            self.light_on[light_num] = set_light
+        if light_num >= 1 and light_num <= 4:
+            self.light_on[light_num - 1] = set_light
 
     # find maximum light on 
     def light_mode(self):
 
         rev_light_on = self.light_on[::-1]
         
-        idx = rev_light_on.find(True)
-        if idx != -1:
-            return 3-idx 
+        try:
+            idx = rev_light_on.index(True)
+            return 4-idx
+        except ValueError:
+            return -1
 
     def fill(self):
         
@@ -138,7 +140,7 @@ class AmbientLEDs:
         r2, g2, b2 = self.colors[2].red, self.colors[2].green, self.colors[2].blue
         r3, g3, b3 = self.colors[2].red, self.colors[2].green, self.colors[2].blue
 
-        fill_num = self.light_mode()
+        fill_num = self.light_mode() 
 
         if fill_num == 1:
             # gamma shift input rgb values

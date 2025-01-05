@@ -159,8 +159,14 @@ def on_connect(client, userdata, flags, reason_code, properties):
         print("Connection successful!")
 
     client.subscribe("TVLeds/light_1/switch")
+    client.subscribe("TVLeds/light_2/switch")
+    client.subscribe("TVLeds/light_3/switch")
+    client.subscribe("TVLeds/light_4/switch")
     client.subscribe("TVLeds/light_1/brightness/set")
     client.subscribe("TVLeds/light_1/rgb/set")
+    client.subscribe("TVLeds/light_2/rgb/set")
+    client.subscribe("TVLeds/light_3/rgb/set")
+    client.subscribe("TVLeds/light_4/rgb/set")
     client.subscribe("TVLeds/light_1/effect/set")
 
 def on_message(client, userdata, msg):
@@ -225,6 +231,28 @@ def on_message(client, userdata, msg):
         ambient_leds.colors[0].set(red, green, blue)
         client.publish("TVLeds/light_1/rgb/status", f"{red},{green},{blue}", qos=0)
 
+    elif msg.topic == "TVLeds/light_2/rgb/set":
+        light_rgb = payload_str
+
+        red, green, blue = [int(x) for x in light_rgb.split(',')]
+        ambient_leds.colors[1].set(red, green, blue)
+        client.publish("TVLeds/light_2/rgb/status", f"{red},{green},{blue}", qos=0)
+
+    elif msg.topic == "TVLeds/light_3/rgb/set":
+        light_rgb = payload_str
+
+        red, green, blue = [int(x) for x in light_rgb.split(',')]
+        ambient_leds.colors[2].set(red, green, blue)
+        client.publish("TVLeds/light_3/rgb/status", f"{red},{green},{blue}", qos=0)
+
+
+    elif msg.topic == "TVLeds/light_4/rgb/set":
+        light_rgb = payload_str
+
+        red, green, blue = [int(x) for x in light_rgb.split(',')]
+        ambient_leds.colors[3].set(red, green, blue)
+        client.publish("TVLeds/light_4/rgb/status", f"{red},{green},{blue}", qos=0)
+
     elif msg.topic == "TVLeds/light_1/effect/set":
         light_effect = payload_str
         
@@ -262,10 +290,19 @@ mqttc.publish("homeassistant/device/TVLeds/config", json.dumps(discovery), qos=0
 
 # set availibility
 mqttc.publish("TVLeds/light_1/availability","online",qos=0)
+mqttc.publish("TVLeds/light_2/availability","online",qos=0)
+mqttc.publish("TVLeds/light_3/availability","online",qos=0)
+mqttc.publish("TVLeds/light_4/availability","online",qos=0)
+
+
 
 try:
     mqttc.loop_forever()
 except KeyboardInterrupt:
     print('ending')
     mqttc.publish("TVLeds/light_1/availability","offline",qos=0)
+    mqttc.publish("TVLeds/light_2/availability","offline",qos=0)
+    mqttc.publish("TVLeds/light_3/availability","offline",qos=0)
+    mqttc.publish("TVLeds/light_4/availability","offline",qos=0)
+    ambient_leds.clear_leds()
     exit(0) 
