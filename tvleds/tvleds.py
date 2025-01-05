@@ -64,6 +64,7 @@ class AmbientLEDs:
         self.colors = []
         for idx in range(4):
             self.colors.append(Color(255, 255, 255))
+        self.light_on = [False, False, False, False]
 
         # Generic LED Values
         self.curr_hue = 0         # 0 to 359 degrees
@@ -114,13 +115,30 @@ class AmbientLEDs:
 
         # set single pixel
         self.pixels[index] = (red, green, blue)
+    
+    # set light quadrant
+    def set_light(self, light_num, set_light=False):
 
-    def fill(self, fill_num):
+        if light_num >= 0 and light_num <= 4:
+            self.light_on[light_num] = set_light
+
+    # find maximum light on 
+    def light_mode(self):
+
+        rev_light_on = self.light_on[::-1]
+        
+        idx = rev_light_on.find(True)
+        if idx != -1:
+            return 3-idx 
+
+    def fill(self):
         
         r0, g0, b0 = self.colors[0].red, self.colors[0].green, self.colors[0].blue 
         r1, g1, b1 = self.colors[1].red, self.colors[1].green, self.colors[1].blue
         r2, g2, b2 = self.colors[2].red, self.colors[2].green, self.colors[2].blue
         r3, g3, b3 = self.colors[2].red, self.colors[2].green, self.colors[2].blue
+
+        fill_num = self.light_mode()
 
         if fill_num == 1:
             # gamma shift input rgb values
@@ -410,5 +428,5 @@ class AmbientLEDs:
         rois = np.append(rois, np.linspace(top_left,top_right,self.num_hor,dtype=np.int16), axis=0)
         rois = np.append(rois, np.linspace(top_right,bottom_right,self.num_ver,dtype=np.int16), axis=0)
         
-        print('rois: {0}, length: {1}'.format(rois, rois.shape[0]))
+        #print('rois: {0}, length: {1}'.format(rois, rois.shape[0]))
         self.ambient_rois = rois

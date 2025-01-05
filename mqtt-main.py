@@ -120,11 +120,17 @@ def begin_task(task):
     global threads, ambient_leds
     trigger_thread_stop()
 
+    # Fill runs again in case another section of lights was activated
+    if task == 'Fill':
+        ambient_leds.fill()
+
+    # otherwise, if current effect is already active, skip 
+    if task == current_effect:
+        return
+
+    # start task
     if task == 'off':
         ambient_leds.clear_leds()
-
-    elif task == 'Fill':
-        ambient_leds.fill(1)
 
     elif task == 'Mood':
         t = threading.Thread(name='Mood Thread', target=task_mood)
@@ -166,10 +172,42 @@ def on_message(client, userdata, msg):
         light_switch = payload_str
         if light_switch == "OFF":
             begin_task('off')
-            client.publish("TVLeds/light_1/status", "OFF", qos=0)
+            ambient_leds.set_light(1,False)
         elif light_switch == "ON":
             begin_task(current_effect)
-            client.publish("TVLeds/light_1/status", "ON", qos=0)
+            ambient_leds.set_light(1,True)
+        
+        client.publish("TVLeds/light_1/status", light_switch, qos=0)
+
+    elif msg.topic == "TVLeds/light_2/switch":
+        light_switch = payload_str
+        if light_switch == "OFF":
+            ambient_leds.set_light(2,False)
+        elif light_switch == "ON":
+            begin_task(current_effect)
+            ambient_leds.set_light(2,True)
+        
+        client.publish("TVLeds/light_2/status", light_switch, qos=0)
+
+    elif msg.topic == "TVLeds/light_3/switch":
+        light_switch = payload_str
+        if light_switch == "OFF":
+            ambient_leds.set_light(3,False)
+        elif light_switch == "ON":
+            begin_task(current_effect)
+            ambient_leds.set_light(3,True)
+        
+        client.publish("TVLeds/light_3/status", light_switch, qos=0)
+
+    elif msg.topic == "TVLeds/light_4/switch":
+        light_switch = payload_str
+        if light_switch == "OFF":
+            ambient_leds.set_light(4,False)
+        elif light_switch == "ON":
+            begin_task(current_effect)
+            ambient_leds.set_light(4,True)
+        
+        client.publish("TVLeds/light_4/status", light_switch, qos=0)
 
     elif msg.topic == "TVLeds/light_1/brightness/set":
         light_brightness = int(payload_str)

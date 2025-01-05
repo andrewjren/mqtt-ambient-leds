@@ -18,20 +18,65 @@
 			},
 			"command_topic":"TVLeds/light_1/switch",
 			"state_topic":"TVLeds/light_1/status",
-			"brightness_state_topic":"TVLeds/light_1/brightness/status",
-			"brightness_command_topic":"TVLeds/light_1/brightness/set",
-			"rgb_state_topic": "TVLeds/light_1/rgb/status",
-			"rgb_command_topic": "TVLeds/light_1/rgb/set",
 			"state_value_template": "{{ value_json.set }}", 
-			"brightness_value_template": "{{ value_json.brightness }}",
-			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
 			"payload_on": "ON",
       		"payload_off": "OFF",
+			"brightness_state_topic":"TVLeds/light_1/brightness/status",
+			"brightness_command_topic":"TVLeds/light_1/brightness/set",
+			"brightness_value_template": "{{ value_json.brightness }}",
+			"rgb_state_topic": "TVLeds/light_1/rgb/status",
+			"rgb_command_topic": "TVLeds/light_1/rgb/set",
+			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
 			"effect_command_topic":"TVLeds/light_1/effect/set",
 			"effect_state_topic":"TVLeds/light_1_/effect/status",
 			"effect_value_template":"{{ value_json.effect.fx }}",
 			"effect_list": ["Fill", "Mood","Pulse","Ambient","Rainbow"],
 			"unique_id":"tvleds0001"
+		},
+		"tv_led_2": {
+			"platform":"light",
+			"availability": {
+				"topic":"TVLeds/light_2/availability"
+			},
+			"command_topic":"TVLeds/light_2/switch",
+			"state_topic":"TVLeds/light_2/status",
+			"state_value_template": "{{ value_json.set }}", 
+			"payload_on": "ON",
+      		"payload_off": "OFF",
+			"rgb_state_topic": "TVLeds/light_2/rgb/status",
+			"rgb_command_topic": "TVLeds/light_2/rgb/set",
+			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
+			"unique_id":"tvleds0002"
+		},
+		"tv_led_3": {
+			"platform":"light",
+			"availability": {
+				"topic":"TVLeds/light_3/availability"
+			},
+			"command_topic":"TVLeds/light_3/switch",
+			"state_topic":"TVLeds/light_3/status",
+			"state_value_template": "{{ value_json.set }}", 
+			"payload_on": "ON",
+      		"payload_off": "OFF",
+			"rgb_state_topic": "TVLeds/light_3/rgb/status",
+			"rgb_command_topic": "TVLeds/light_3/rgb/set",
+			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
+			"unique_id":"tvleds0003"
+		},
+		"tv_led_4": {
+			"platform":"light",
+			"availability": {
+				"topic":"TVLeds/light_4/availability"
+			},
+			"command_topic":"TVLeds/light_4/switch",
+			"state_topic":"TVLeds/light_4/status",
+			"state_value_template": "{{ value_json.set }}", 
+			"payload_on": "ON",
+      		"payload_off": "OFF",
+			"rgb_state_topic": "TVLeds/light_4/rgb/status",
+			"rgb_command_topic": "TVLeds/light_4/rgb/set",
+			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
+			"unique_id":"tvleds0004"
 		}
 	}
 }
