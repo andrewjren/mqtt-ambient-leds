@@ -21,6 +21,14 @@ current_effect = 'Fill'
 # use as signal to stop threads
 stop_thread = Event() 
 
+# report mqtt status 
+def mqtt_status(client):
+    global ambient_leds
+
+    for idx in range(len(ambient_leds.light_on)):
+        on_status = "ON" if ambient_leds.light_on[idx] else "OFF"
+        client.publish(f"TVLeds/light_{idx}/status", on_status, qos=0)
+
 # trigger thread stop
 def trigger_thread_stop():
     global threads
@@ -258,6 +266,7 @@ def on_message(client, userdata, msg):
     
     # start current task
     begin_task(current_effect)
+    mqtt_status(client)
 
 
 # Create MQTT Client 

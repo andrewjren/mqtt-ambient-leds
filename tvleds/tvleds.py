@@ -139,7 +139,7 @@ class AmbientLEDs:
         
         try:
             idx = rev_light_on.index(True)
-            return 3-idx
+            return 4-idx
         except ValueError:
             return -1
 
@@ -156,7 +156,7 @@ class AmbientLEDs:
         print("Fill Num:" + str(fill_num))
 
         if fill_num == 1:
-            self.pixels.fill(r0, g0, b0)
+            self.pixels.fill((r0, g0, b0))
 
         # use 2 to fill up/down split
         elif fill_num == 2:
