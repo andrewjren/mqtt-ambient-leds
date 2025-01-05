@@ -397,10 +397,14 @@ class AmbientLEDs:
         g = G/(R+G+B)
         b = B/(R+G+B)
 
-        if b <= g:
-            h = math.acos((0.5*(r-g+r-b)) / math.sqrt((r-g)*(r-g) + (r-b)*(g-b)))
-        else: # b > g
-            h = 2*math.pi - math.acos((0.5*(r-g+r-b)) / math.sqrt((r-g)*(r-g) + (r-b)*(g-b)))
+        try:
+            if b <= g:
+                h = math.acos((0.5*(r-g+r-b)) / math.sqrt((r-g)*(r-g) + (r-b)*(g-b)))
+            else: # b > g
+                h = 2*math.pi - math.acos((0.5*(r-g+r-b)) / math.sqrt((r-g)*(r-g) + (r-b)*(g-b)))
+        except ZeroDivisionError:
+            print(f'R:{r} G:{g} B:{b}')
+            exit(0)
 
         s = 1 - 3 * min(r,g,b)
         i = (R+G+B)/(3*255)
