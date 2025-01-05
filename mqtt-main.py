@@ -143,10 +143,9 @@ def begin_task(task):
 
     trigger_thread_stop()
 
-    # start task
-    if task == 'off':
+    if task == 'Off':
         ambient_leds.clear_leds()
-
+    
     elif task == 'Mood':
         t = threading.Thread(name='Mood Thread', target=task_mood)
         t.start()
@@ -189,15 +188,16 @@ def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
     payload_str = msg.payload.decode("utf-8")
 
+    skip_task = False
+
     if msg.topic == "TVLeds/light_1/switch":
         light_switch = payload_str
         if light_switch == "OFF":
-            current_effect = 'off'
+            begin_task('Off')
+            skip_task = True
             ambient_leds.set_light(0,False)
         elif light_switch == "ON":
             ambient_leds.set_light(0,True)
-        
-        client.publish("TVLeds/light_1/status", light_switch, qos=0)
 
     elif msg.topic == "TVLeds/light_2/switch":
         light_switch = payload_str
@@ -205,8 +205,6 @@ def on_message(client, userdata, msg):
             ambient_leds.set_light(1,False)
         elif light_switch == "ON":
             ambient_leds.set_light(1,True)
-        
-        client.publish("TVLeds/light_2/status", light_switch, qos=0)
 
     elif msg.topic == "TVLeds/light_3/switch":
         light_switch = payload_str
@@ -214,8 +212,6 @@ def on_message(client, userdata, msg):
             ambient_leds.set_light(2,False)
         elif light_switch == "ON":
             ambient_leds.set_light(2,True)
-        
-        client.publish("TVLeds/light_3/status", light_switch, qos=0)
 
     elif msg.topic == "TVLeds/light_4/switch":
         light_switch = payload_str
@@ -239,29 +235,24 @@ def on_message(client, userdata, msg):
 
         red, green, blue = [int(x) for x in light_rgb.split(',')]
         ambient_leds.colors[0].set(red, green, blue)
-        client.publish("TVLeds/light_1/rgb/status", f"{red},{green},{blue}", qos=0)
 
     elif msg.topic == "TVLeds/light_2/rgb/set":
         light_rgb = payload_str
 
         red, green, blue = [int(x) for x in light_rgb.split(',')]
         ambient_leds.colors[1].set(red, green, blue)
-        client.publish("TVLeds/light_2/rgb/status", f"{red},{green},{blue}", qos=0)
 
     elif msg.topic == "TVLeds/light_3/rgb/set":
         light_rgb = payload_str
 
         red, green, blue = [int(x) for x in light_rgb.split(',')]
         ambient_leds.colors[2].set(red, green, blue)
-        client.publish("TVLeds/light_3/rgb/status", f"{red},{green},{blue}", qos=0)
-
 
     elif msg.topic == "TVLeds/light_4/rgb/set":
         light_rgb = payload_str
 
         red, green, blue = [int(x) for x in light_rgb.split(',')]
         ambient_leds.colors[3].set(red, green, blue)
-        client.publish("TVLeds/light_4/rgb/status", f"{red},{green},{blue}", qos=0)
 
     elif msg.topic == "TVLeds/light_1/effect/set":
         light_effect = payload_str
@@ -270,7 +261,9 @@ def on_message(client, userdata, msg):
         print("Unhandled Message!")
     
     # start current task
-    begin_task(current_effect)
+    if not skip_task:
+        begin_task(current_effect)
+        
     mqtt_status(client)
 
 
