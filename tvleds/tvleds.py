@@ -398,6 +398,8 @@ class AmbientLEDs:
         b = B/(R+G+B)
 
         try:
+            if r == g and g == b:
+                h = 0.0
             if b <= g:
                 h = math.acos((0.5*(r-g+r-b)) / math.sqrt((r-g)*(r-g) + (r-b)*(g-b)))
             else: # b > g
