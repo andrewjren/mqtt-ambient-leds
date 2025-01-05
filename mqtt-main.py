@@ -34,7 +34,8 @@ def mqtt_status(client):
         red, green, blue = ambient_leds.colors[idx].get_rgb()
         client.publish(f"TVLeds/light_{idx+1}/rgb/status", f"{red},{green},{blue}", qos=0)
 
-    client.publish("TVLeds/light_1/brightness/status", f"{ambient_leds.set_intensity}", qos=0)
+    intensity = int(ambient_leds.set_intensity * 255)
+    client.publish("TVLeds/light_1/brightness/status", f"{intensity}", qos=0)
 
 # trigger thread stop
 def trigger_thread_stop():
