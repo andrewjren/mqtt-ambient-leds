@@ -153,6 +153,8 @@ class AmbientLEDs:
 
         fill_num = self.light_mode() 
 
+        print("Fill Num:" + str(fill_num))
+
         if fill_num == 1:
             self.pixels.fill(r0, g0, b0)
 

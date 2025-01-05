@@ -128,7 +128,7 @@ def begin_task(task):
     if task == current_effect:
         return
 
-    trigger_threads_stop()
+    trigger_thread_stop()
 
     # start task
     if task == 'off':
@@ -290,6 +290,11 @@ mqttc.publish("TVLeds/light_2/availability","online",qos=0)
 mqttc.publish("TVLeds/light_3/availability","online",qos=0)
 mqttc.publish("TVLeds/light_4/availability","online",qos=0)
 
+# init status
+mqttc.publish("TVLeds/light_1/status", "OFF", qos=0)
+mqttc.publish("TVLeds/light_2/status", "OFF", qos=0)
+mqttc.publish("TVLeds/light_3/status", "OFF", qos=0)
+mqttc.publish("TVLeds/light_4/status", "OFF", qos=0)
 
 
 try:
