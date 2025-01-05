@@ -116,11 +116,19 @@ class AmbientLEDs:
         # set single pixel
         self.pixels[index] = (red, green, blue)
     
-    # set light quadrant
+    # set light quadrant, index by 0
     def set_light(self, light_num, set_light=False):
 
-        if light_num >= 1 and light_num <= 4:
-            self.light_on[light_num - 1] = set_light
+        if light_num < 0 or light_num > 3:
+            return 
+        
+        # if true, set light and all lower lights as true 
+        if set_light:
+            self.light_on[:light_num] = set_light
+
+        # otherwise, set light and all higher lights as false
+        else:
+            self.light_on[light_num:] = set_light
 
     # find maximum light on 
     def light_mode(self):
@@ -129,32 +137,33 @@ class AmbientLEDs:
         
         try:
             idx = rev_light_on.index(True)
-            return 4-idx
+            return 3-idx
         except ValueError:
             return -1
 
     def fill(self):
         
-        r0, g0, b0 = self.colors[0].red, self.colors[0].green, self.colors[0].blue 
-        r1, g1, b1 = self.colors[1].red, self.colors[1].green, self.colors[1].blue
-        r2, g2, b2 = self.colors[2].red, self.colors[2].green, self.colors[2].blue
-        r3, g3, b3 = self.colors[2].red, self.colors[2].green, self.colors[2].blue
+        # gamma shift input rgb values
+        r0, g0, b0 = self.gamma_shift(self.colors[0].red, self.colors[0].green, self.colors[0].blue)
+        r1, g1, b1 = self.gamma_shift(self.colors[1].red, self.colors[1].green, self.colors[1].blue)
+        r2, g2, b2 = self.gamma_shift(self.colors[2].red, self.colors[2].green, self.colors[2].blue)
+        r3, g3, b3 = self.gamma_shift(self.colors[3].red, self.colors[3].green, self.colors[3].blue)
 
         fill_num = self.light_mode() 
 
         if fill_num == 1:
-            # gamma shift input rgb values
-            red, green, blue = self.gamma_shift(r0, g0, b0)
-            self.pixels.fill((red, green, blue))
+            self.pixels.fill(r0, g0, b0)
 
-            
+        # use 2 to fill up/down split
         elif fill_num == 2:
 
             for idx in range(self.num_leds):
-                if idx < self.num_leds / 2:
+                if idx < self.num_ver/2:
                     self.set_led(idx,r0,g0,b0)
-                else:
+                elif idx < self.num_ver + self.num_hor + self.num_ver/2:
                     self.set_led(idx,r1,g1,b1)
+                else:
+                    self.set_led(idx,r0,g0,b0)
 
         elif fill_num == 3:
 

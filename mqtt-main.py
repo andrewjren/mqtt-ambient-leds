@@ -123,6 +123,7 @@ def begin_task(task):
     # Fill runs again in case another section of lights was activated
     if task == 'Fill':
         ambient_leds.fill()
+        return
 
     # otherwise, if current effect is already active, skip 
     if task == current_effect:
@@ -177,41 +178,37 @@ def on_message(client, userdata, msg):
     if msg.topic == "TVLeds/light_1/switch":
         light_switch = payload_str
         if light_switch == "OFF":
-            begin_task('off')
-            ambient_leds.set_light(1,False)
+            current_effect = 'off'
+            ambient_leds.set_light(0,False)
         elif light_switch == "ON":
-            begin_task(current_effect)
-            ambient_leds.set_light(1,True)
+            ambient_leds.set_light(0,True)
         
         client.publish("TVLeds/light_1/status", light_switch, qos=0)
 
     elif msg.topic == "TVLeds/light_2/switch":
         light_switch = payload_str
         if light_switch == "OFF":
-            ambient_leds.set_light(2,False)
+            ambient_leds.set_light(1,False)
         elif light_switch == "ON":
-            begin_task(current_effect)
-            ambient_leds.set_light(2,True)
+            ambient_leds.set_light(1,True)
         
         client.publish("TVLeds/light_2/status", light_switch, qos=0)
 
     elif msg.topic == "TVLeds/light_3/switch":
         light_switch = payload_str
         if light_switch == "OFF":
-            ambient_leds.set_light(3,False)
+            ambient_leds.set_light(2,False)
         elif light_switch == "ON":
-            begin_task(current_effect)
-            ambient_leds.set_light(3,True)
+            ambient_leds.set_light(2,True)
         
         client.publish("TVLeds/light_3/status", light_switch, qos=0)
 
     elif msg.topic == "TVLeds/light_4/switch":
         light_switch = payload_str
         if light_switch == "OFF":
-            ambient_leds.set_light(4,False)
+            ambient_leds.set_light(3,False)
         elif light_switch == "ON":
-            begin_task(current_effect)
-            ambient_leds.set_light(4,True)
+            ambient_leds.set_light(3,True)
         
         client.publish("TVLeds/light_4/status", light_switch, qos=0)
 
@@ -221,7 +218,6 @@ def on_message(client, userdata, msg):
         R, G, B = ambient_leds.hsi2rgb(H, S, light_brightness)
 
         ambient_leds.colors[0].set(R,G,B)
-        begin_task(current_effect)
         client.publish("TVLeds/light_1/brightness/status", f"{light_brightness}", qos=0)
 
     elif msg.topic == "TVLeds/light_1/rgb/set":
@@ -255,19 +251,18 @@ def on_message(client, userdata, msg):
 
     elif msg.topic == "TVLeds/light_1/effect/set":
         light_effect = payload_str
-        
-        if current_effect != light_effect:
-            current_effect = light_effect 
-            trigger_thread_stop()
-            begin_task(current_effect)
-        
+
+    else:
+        print("Unhandled Message!")
     
+    # start current task
+    begin_task(current_effect)
 
 
 # Create MQTT Client 
 with open('discovery.json') as f:
     discovery = json.load(f)
-    print(discovery)
+    #print(discovery)
 
 mqtt_client_id = "tvled_client"
 mqtt_transport = "tcp"
@@ -298,6 +293,7 @@ mqttc.publish("TVLeds/light_4/availability","online",qos=0)
 
 try:
     mqttc.loop_forever()
+
 except KeyboardInterrupt:
     print('ending')
     mqttc.publish("TVLeds/light_1/availability","offline",qos=0)
