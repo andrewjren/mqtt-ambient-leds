@@ -73,6 +73,7 @@ class AmbientLEDs:
         self.curr_hue = 0         # 0 to 359 degrees
         self.curr_saturation = 0  # 0 to 1
         self.curr_intensity = 0.9 # 0 to 1, hardcode intensity for simplicity
+        self.set_intensity = 1
         self.time_step_s = 0.05
         self.time_step_us = self.time_step_s * 1000000
 
@@ -147,12 +148,21 @@ class AmbientLEDs:
             return -1
 
     def fill(self):
-        
+        # update intensity values from set_intensity (homeassistant always gives 100% intensity RGB values)
+        H, S, I = self.rgb2hsi(self.colors[0].red, self.colors[0].green, self.colors[0].blue)
+        R0, G0, B0 = self.hsi2rgb(H, S, self.set_intensity)
+        H, S, I = self.rgb2hsi(self.colors[1].red, self.colors[1].green, self.colors[1].blue)
+        R1, G1, B1 = self.hsi2rgb(H, S, self.set_intensity)
+        H, S, I = self.rgb2hsi(self.colors[2].red, self.colors[2].green, self.colors[2].blue)
+        R2, G2, B2 = self.hsi2rgb(H, S, self.set_intensity)
+        H, S, I = self.rgb2hsi(self.colors[3].red, self.colors[3].green, self.colors[3].blue)
+        R3, G3, B3 = self.hsi2rgb(H, S, self.set_intensity)
+
         # gamma shift input rgb values
-        r0, g0, b0 = self.gamma_shift(self.colors[0].red, self.colors[0].green, self.colors[0].blue)
-        r1, g1, b1 = self.gamma_shift(self.colors[1].red, self.colors[1].green, self.colors[1].blue)
-        r2, g2, b2 = self.gamma_shift(self.colors[2].red, self.colors[2].green, self.colors[2].blue)
-        r3, g3, b3 = self.gamma_shift(self.colors[3].red, self.colors[3].green, self.colors[3].blue)
+        r0, g0, b0 = self.gamma_shift(R0,G0,B0)
+        r1, g1, b1 = self.gamma_shift(R1,G1,B1)
+        r2, g2, b2 = self.gamma_shift(R2,G2,B2)
+        r3, g3, b3 = self.gamma_shift(R3,G3,B3)
 
         fill_num = self.light_mode() 
 
@@ -238,9 +248,6 @@ class AmbientLEDs:
         # get time step in us, determine number of steps per each period
         self.mood_period_steps = int(self.mood_period / self.time_step_s)
 
-        # other configuration
-        self.curr_intensity = intensity
-
         print('Initialize Mood mode with period = {0}, time step = {1}'.format(self.mood_period,self.time_step_s))
         
     # step mood mode
@@ -272,7 +279,7 @@ class AmbientLEDs:
             self.curr_hue = (self.curr_hue + self.step_hue) % 360
 
             # convert to rgb, then fill leds
-            r,g,b = self.hsi2rgb(self.curr_hue,self.curr_saturation,self.curr_intensity)
+            r,g,b = self.hsi2rgb(self.curr_hue,self.curr_saturation,self.set_intensity)
             self.colors[0].set(r,g,b)
             self.fill(1)
             self.mood_count = self.mood_count + 1
@@ -367,6 +374,7 @@ class AmbientLEDs:
 
     # thanks to this stack overflow page
     # https://stackoverflow.com/questions/71705531/python-hsi-to-rgb-conversion-not-what-i-expect
+    # intensity is [0..1]
     @staticmethod
     def hsi2rgb(H,S,I):
 
@@ -389,6 +397,7 @@ class AmbientLEDs:
         return int(np.clip(255*r,0,255)), int(np.clip(255*g,0,255)), int(np.clip(255*b,0,255))
     
     # http://eng.usf.edu/~hady/courses/cap5400/rgb-to-hsi.pdf
+    # intensity is [0..1]
     @staticmethod 
     def rgb2hsi(R,G,B):
 
@@ -413,7 +422,7 @@ class AmbientLEDs:
         
         H = math.degrees(h)
         S = s*100
-        I = i # treat Intensity as percentage, 0 to 1
+        I = i
 
         return H,S,I
     
