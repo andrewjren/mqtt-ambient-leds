@@ -26,8 +26,13 @@ def mqtt_status(client):
     global ambient_leds
 
     for idx in range(len(ambient_leds.light_on)):
+        # On/Off 
         on_status = "ON" if ambient_leds.light_on[idx] else "OFF"
-        client.publish(f"TVLeds/light_{idx}/status", on_status, qos=0)
+        client.publish(f"TVLeds/light_{idx+1}/status", on_status, qos=0)
+
+        # RGB
+        red, green, blue = ambient_leds.colors[idx].get_rgb()
+        client.publish("TVLeds/light_1/rgb/status", f"{red},{green},{blue}", qos=0)
 
 # trigger thread stop
 def trigger_thread_stop():
@@ -300,11 +305,7 @@ mqttc.publish("TVLeds/light_3/availability","online",qos=0)
 mqttc.publish("TVLeds/light_4/availability","online",qos=0)
 
 # init status
-mqttc.publish("TVLeds/light_1/status", "OFF", qos=0)
-mqttc.publish("TVLeds/light_2/status", "OFF", qos=0)
-mqttc.publish("TVLeds/light_3/status", "OFF", qos=0)
-mqttc.publish("TVLeds/light_4/status", "OFF", qos=0)
-
+mqtt_status(mqttc)
 
 try:
     mqttc.loop_forever()

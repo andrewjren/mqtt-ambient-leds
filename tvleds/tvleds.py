@@ -19,6 +19,9 @@ class Color:
         self.green = i_green 
         self.blue = i_blue 
 
+    def get_rgb(self):
+        return self.red, self.green, self.blue
+
 # AmbientLEDs defines and controls the LED Strips and Camera 
 class AmbientLEDs:
 
