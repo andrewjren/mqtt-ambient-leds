@@ -124,11 +124,13 @@ class AmbientLEDs:
         
         # if true, set light and all lower lights as true 
         if set_light:
-            self.light_on[:light_num] = set_light
+            for idx in range(0,light_num+1):
+                self.light_on[idx] = set_light
 
         # otherwise, set light and all higher lights as false
         else:
-            self.light_on[light_num:] = set_light
+            for idx in range(light_num,4):
+                self.light_on[idx] = set_light
 
     # find maximum light on 
     def light_mode(self):

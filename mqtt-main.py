@@ -118,7 +118,6 @@ def task_rainbow():
 
 def begin_task(task):
     global threads, ambient_leds
-    trigger_thread_stop()
 
     # Fill runs again in case another section of lights was activated
     if task == 'Fill':
@@ -128,6 +127,8 @@ def begin_task(task):
     # otherwise, if current effect is already active, skip 
     if task == current_effect:
         return
+
+    trigger_threads_stop()
 
     # start task
     if task == 'off':
