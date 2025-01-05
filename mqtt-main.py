@@ -223,7 +223,8 @@ def on_message(client, userdata, msg):
         client.publish("TVLeds/light_4/status", light_switch, qos=0)
 
     elif msg.topic == "TVLeds/light_1/brightness/set":
-        light_brightness = int(payload_str)
+        light_brightness = int(payload_str) / 100.0 
+        print(f"set brightness to {light_brightness}")
         H, S, I = ambient_leds.rgb2hsi(ambient_leds.colors[0].red, ambient_leds.colors[0].green, ambient_leds.colors[0].blue)
         R, G, B = ambient_leds.hsi2rgb(H, S, light_brightness)
 
@@ -263,7 +264,7 @@ def on_message(client, userdata, msg):
     # start current task
     if not skip_task:
         begin_task(current_effect)
-        
+
     mqtt_status(client)
 
 

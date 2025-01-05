@@ -413,7 +413,7 @@ class AmbientLEDs:
         
         H = math.degrees(h)
         S = s*100
-        I = i*255
+        I = i # treat Intensity as percentage, 0 to 1
 
         return H,S,I
     
