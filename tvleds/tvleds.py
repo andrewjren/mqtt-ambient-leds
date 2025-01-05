@@ -164,6 +164,11 @@ class AmbientLEDs:
         r2, g2, b2 = self.gamma_shift(R2,G2,B2)
         r3, g3, b3 = self.gamma_shift(R3,G3,B3)
 
+        print(f"0:{r0},{g0},{b0}")
+        print(f"1:{r1},{g1},{b1}")
+        print(f"2:{r2},{g2},{b2}")
+        print(f"3:{r3},{g3},{b3}")
+
         fill_num = self.light_mode() 
 
         print("Fill Num:" + str(fill_num))
@@ -418,7 +423,7 @@ class AmbientLEDs:
             exit(0)
 
         s = 1 - 3 * min(r,g,b)
-        i = (R+G+B)/(3*255)
+        i = (R+G+B)/(3*255.0)
         
         H = math.degrees(h)
         S = s*100
