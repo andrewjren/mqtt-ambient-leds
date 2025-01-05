@@ -32,7 +32,9 @@ def mqtt_status(client):
 
         # RGB
         red, green, blue = ambient_leds.colors[idx].get_rgb()
-        client.publish("TVLeds/light_1/rgb/status", f"{red},{green},{blue}", qos=0)
+        client.publish(f"TVLeds/light_{idx+1}/rgb/status", f"{red},{green},{blue}", qos=0)
+
+    client.publish("TVLeds/light_1/brightness/status", f"{ambient_leds.set_intensity}", qos=0)
 
 # trigger thread stop
 def trigger_thread_stop():
@@ -226,8 +228,6 @@ def on_message(client, userdata, msg):
         light_brightness = int(payload_str) / 255.0 
         print(f"set brightness to {light_brightness}")
         ambient_leds.set_intensity = light_brightness
-
-        client.publish("TVLeds/light_1/brightness/status", f"{light_brightness}", qos=0)
 
     elif msg.topic == "TVLeds/light_1/rgb/set":
         light_rgb = payload_str
