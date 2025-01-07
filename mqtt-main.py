@@ -25,6 +25,8 @@ stop_thread = Event()
 def mqtt_status(client):
     global ambient_leds
 
+    intensity = int(ambient_leds.set_intensity * 255)
+
     for idx in range(len(ambient_leds.light_on)):
         # On/Off 
         on_status = "ON" if ambient_leds.light_on[idx] else "OFF"
@@ -34,8 +36,8 @@ def mqtt_status(client):
         red, green, blue = ambient_leds.colors[idx].get_rgb()
         client.publish(f"TVLeds/light_{idx+1}/rgb/status", f"{red},{green},{blue}", qos=0)
 
-    intensity = int(ambient_leds.set_intensity * 255)
-    client.publish("TVLeds/light_1/brightness/status", f"{intensity}", qos=0)
+        # Brightness
+        client.publish(f"TVLeds/light_{idx+1}/brightness/status", f"{intensity}", qos=0)
 
 # trigger thread stop
 def trigger_thread_stop():
@@ -180,6 +182,9 @@ def on_connect(client, userdata, flags, reason_code, properties):
     client.subscribe("TVLeds/light_3/switch")
     client.subscribe("TVLeds/light_4/switch")
     client.subscribe("TVLeds/light_1/brightness/set")
+    client.subscribe("TVLeds/light_2/brightness/set")
+    client.subscribe("TVLeds/light_3/brightness/set")
+    client.subscribe("TVLeds/light_4/brightness/set")
     client.subscribe("TVLeds/light_1/rgb/set")
     client.subscribe("TVLeds/light_2/rgb/set")
     client.subscribe("TVLeds/light_3/rgb/set")
@@ -225,7 +230,8 @@ def on_message(client, userdata, msg):
         
         client.publish("TVLeds/light_4/status", light_switch, qos=0)
 
-    elif msg.topic == "TVLeds/light_1/brightness/set":
+    elif (msg.topic == "TVLeds/light_1/brightness/set" or msg.topic == "TVLeds/light_2/brightness/set" or 
+          msg.topic == "TVLeds/light_3/brightness/set" or msg.topic == "TVLeds/light_4/brightness/set"):
         light_brightness = int(payload_str) / 255.0 
         print(f"set brightness to {light_brightness}")
         ambient_leds.set_intensity = light_brightness

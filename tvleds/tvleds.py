@@ -149,20 +149,24 @@ class AmbientLEDs:
 
     def fill(self):
         # update intensity values from set_intensity (homeassistant always gives 100% intensity RGB values)
-        H, S, I = self.rgb2hsi(self.colors[0].red, self.colors[0].green, self.colors[0].blue)
-        R0, G0, B0 = self.hsi2rgb(H, S, self.set_intensity)
-        H, S, I = self.rgb2hsi(self.colors[1].red, self.colors[1].green, self.colors[1].blue)
-        R1, G1, B1 = self.hsi2rgb(H, S, self.set_intensity)
-        H, S, I = self.rgb2hsi(self.colors[2].red, self.colors[2].green, self.colors[2].blue)
-        R2, G2, B2 = self.hsi2rgb(H, S, self.set_intensity)
-        H, S, I = self.rgb2hsi(self.colors[3].red, self.colors[3].green, self.colors[3].blue)
-        R3, G3, B3 = self.hsi2rgb(H, S, self.set_intensity)
+       #H, S, I = self.rgb2hsi(self.colors[0].red, self.colors[0].green, self.colors[0].blue)
+       #R0, G0, B0 = self.hsi2rgb(H, S, self.set_intensity)
+       #H, S, I = self.rgb2hsi(self.colors[1].red, self.colors[1].green, self.colors[1].blue)
+       #R1, G1, B1 = self.hsi2rgb(H, S, self.set_intensity)
+       #H, S, I = self.rgb2hsi(self.colors[2].red, self.colors[2].green, self.colors[2].blue)
+       #R2, G2, B2 = self.hsi2rgb(H, S, self.set_intensity)
+       #H, S, I = self.rgb2hsi(self.colors[3].red, self.colors[3].green, self.colors[3].blue)
+       #R3, G3, B3 = self.hsi2rgb(H, S, self.set_intensity)
+        
+        # scale intensity of RGB values
+        I = self.set_intensity
 
+        I * self.colors[0].red, I * self.colors[0].green, I * self.colors[0].blue
         # gamma shift input rgb values
-        r0, g0, b0 = self.gamma_shift(R0,G0,B0)
-        r1, g1, b1 = self.gamma_shift(R1,G1,B1)
-        r2, g2, b2 = self.gamma_shift(R2,G2,B2)
-        r3, g3, b3 = self.gamma_shift(R3,G3,B3)
+        r0, g0, b0 = self.gamma_shift(I * self.colors[0].red, I * self.colors[0].green, I * self.colors[0].blue)
+        r1, g1, b1 = self.gamma_shift(I * self.colors[1].red, I * self.colors[1].green, I * self.colors[1].blue)
+        r2, g2, b2 = self.gamma_shift(I * self.colors[2].red, I * self.colors[2].green, I * self.colors[2].blue)
+        r3, g3, b3 = self.gamma_shift(I * self.colors[3].red, I * self.colors[3].green, I * self.colors[3].blue)
 
         print(f"0:{r0},{g0},{b0}")
         print(f"1:{r1},{g1},{b1}")
