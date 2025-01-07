@@ -300,6 +300,7 @@ class AmbientLEDs:
     def init_pulse(self):
 
         # get time step in us, determine number of steps per each period
+        self.pulse_period_s = 60 / self.pulse_bpm
         self.pulse_period_steps = int(self.pulse_period_s / self.time_step_s)
         self.pulse_count = 0
 

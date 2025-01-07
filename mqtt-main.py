@@ -189,6 +189,8 @@ def on_connect(client, userdata, flags, reason_code, properties):
     client.subscribe("TVLeds/light_3/rgb/set")
     client.subscribe("TVLeds/light_4/rgb/set")
     client.subscribe("TVLeds/light_1/effect/set")
+    client.subscribe("TVLeds/settings/mood_time/set")
+    client.subscribe("TVLeds/settings/pulse_time/set")
 
 def on_message(client, userdata, msg):
     global ambient_leds, current_effect
@@ -263,6 +265,13 @@ def on_message(client, userdata, msg):
     elif msg.topic == "TVLeds/light_1/effect/set":
         current_effect = payload_str
 
+    elif msg.topic == "TVLeds/settings/mood_time/set":
+        mood_time = int(payload_str)
+        ambient_leds.mood_period = mood_time
+
+    elif msg.topic == "TVLeds/settings/pulse_time/set":
+        pulse_bpm = int(payload_str)
+
     else:
         print("Unhandled Message!")
     
@@ -302,6 +311,8 @@ mqttc.publish("TVLeds/light_1/availability","online",qos=0)
 mqttc.publish("TVLeds/light_2/availability","online",qos=0)
 mqttc.publish("TVLeds/light_3/availability","online",qos=0)
 mqttc.publish("TVLeds/light_4/availability","online",qos=0)
+mqttc.publish("TVLeds/settings/mood_time/availability","online",qos=0)
+mqttc.publish("TVLeds/settings/pulse_time/availability","online",qos=0)
 
 # init status
 mqtt_status(mqttc)
@@ -315,5 +326,8 @@ except KeyboardInterrupt:
     mqttc.publish("TVLeds/light_2/availability","offline",qos=0)
     mqttc.publish("TVLeds/light_3/availability","offline",qos=0)
     mqttc.publish("TVLeds/light_4/availability","offline",qos=0)
+    mqttc.publish("TVLeds/settings/mood_time/availability","offline",qos=0)
+    mqttc.publish("TVLeds/settings/pulse_time/availability","offline",qos=0)
+
     ambient_leds.clear_leds()
     exit(0) 
