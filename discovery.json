@@ -23,10 +23,10 @@
       		"payload_off": "OFF",
 			"brightness_state_topic":"TVLeds/light_1/brightness/status",
 			"brightness_command_topic":"TVLeds/light_1/brightness/set",
-			"brightness_value_template": "{{ value_json.brightness }}",
+			"brightness_value_template": "{{ value }}",
 			"rgb_state_topic": "TVLeds/light_1/rgb/status",
 			"rgb_command_topic": "TVLeds/light_1/rgb/set",
-			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
+			"rgb_value_template": "{{ value }}",
 			"effect_command_topic":"TVLeds/light_1/effect/set",
 			"effect_state_topic":"TVLeds/light_1_/effect/status",
 			"effect_value_template":"{{ value_json.effect.fx }}",
@@ -45,10 +45,10 @@
       		"payload_off": "OFF",
 			"brightness_state_topic":"TVLeds/light_2/brightness/status",
 			"brightness_command_topic":"TVLeds/light_2/brightness/set",
-			"brightness_value_template": "{{ value_json.brightness }}",
+			"brightness_value_template": "{{ value}}",
 			"rgb_state_topic": "TVLeds/light_2/rgb/status",
 			"rgb_command_topic": "TVLeds/light_2/rgb/set",
-			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
+			"rgb_value_template": "{{ value }}",
 			"unique_id":"tvleds0002"
 		},
 		"tv_led_3": {
@@ -63,10 +63,10 @@
       		"payload_off": "OFF",
 			"brightness_state_topic":"TVLeds/light_3/brightness/status",
 			"brightness_command_topic":"TVLeds/light_3/brightness/set",
-			"brightness_value_template": "{{ value_json.brightness }}",
+			"brightness_value_template": "{{ value}}",
 			"rgb_state_topic": "TVLeds/light_3/rgb/status",
 			"rgb_command_topic": "TVLeds/light_3/rgb/set",
-			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
+			"rgb_value_template": "{{ value }}",
 			"unique_id":"tvleds0003"
 		},
 		"tv_led_4": {
@@ -81,10 +81,10 @@
       		"payload_off": "OFF",
 			"brightness_state_topic":"TVLeds/light_4/brightness/status",
 			"brightness_command_topic":"TVLeds/light_4/brightness/set",
-			"brightness_value_template": "{{ value_json.brightness }}",
+			"brightness_value_template": "{{ value}}",
 			"rgb_state_topic": "TVLeds/light_4/rgb/status",
 			"rgb_command_topic": "TVLeds/light_4/rgb/set",
-			"rgb_value_template": "{{ value_json.rgb | join(',') }}",
+			"rgb_value_template": "{{ value }}",
 			"unique_id":"tvleds0004"
 		}
 	}

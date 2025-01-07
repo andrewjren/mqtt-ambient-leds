@@ -26,6 +26,7 @@ def mqtt_status(client):
     global ambient_leds
 
     intensity = int(ambient_leds.set_intensity * 255)
+    print(f"intensity: {intensity}")
 
     for idx in range(len(ambient_leds.light_on)):
         # On/Off 
@@ -142,12 +143,10 @@ def begin_task(task):
         ambient_leds.fill()
         return
 
-    # otherwise, if current effect is already active, skip 
-    if task == current_effect:
-        return
-
+    print("here1")
     trigger_thread_stop()
 
+    print("here2")
     if task == 'Off':
         ambient_leds.clear_leds()
     
@@ -262,7 +261,7 @@ def on_message(client, userdata, msg):
         ambient_leds.colors[3].set(red, green, blue)
 
     elif msg.topic == "TVLeds/light_1/effect/set":
-        light_effect = payload_str
+        current_effect = payload_str
 
     else:
         print("Unhandled Message!")

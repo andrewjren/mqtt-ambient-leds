@@ -159,9 +159,8 @@ class AmbientLEDs:
        #R3, G3, B3 = self.hsi2rgb(H, S, self.set_intensity)
         
         # scale intensity of RGB values
-        I = self.set_intensity
+        I = math.sqrt(self.set_intensity)
 
-        I * self.colors[0].red, I * self.colors[0].green, I * self.colors[0].blue
         # gamma shift input rgb values
         r0, g0, b0 = self.gamma_shift(I * self.colors[0].red, I * self.colors[0].green, I * self.colors[0].blue)
         r1, g1, b1 = self.gamma_shift(I * self.colors[1].red, I * self.colors[1].green, I * self.colors[1].blue)
@@ -249,7 +248,7 @@ class AmbientLEDs:
             return False 
 
     # init mood mode 
-    def init_mood(self, intensity = 0.9):
+    def init_mood(self):
         # reset tracker for when current color cycle is done
         self.mood_cycle_done = True
         self.mood_count = 0
@@ -290,7 +289,7 @@ class AmbientLEDs:
             # convert to rgb, then fill leds
             r,g,b = self.hsi2rgb(self.curr_hue,self.curr_saturation,self.set_intensity)
             self.colors[0].set(r,g,b)
-            self.fill(1)
+            self.fill()
             self.mood_count = self.mood_count + 1
 
             # if count is reached, get new HSI target value
@@ -325,7 +324,7 @@ class AmbientLEDs:
         r,g,b = self.hsi2rgb(self.curr_hue,self.curr_saturation,self.curr_intensity)
 
         self.colors[0].set(r,g,b)
-        self.fill(1)
+        self.fill()
 
         self.pulse_count = self.pulse_count + 1
 
