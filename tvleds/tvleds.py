@@ -105,9 +105,9 @@ class AmbientLEDs:
 
     # gamma shift RGB values based on gamma table
     def gamma_shift(self, in_red, in_green, in_blue):
-        red = self.gamma_table[in_red]
-        green = self.gamma_table[in_green]
-        blue = self.gamma_table[in_blue]
+        red = self.gamma_table[int(in_red)]
+        green = self.gamma_table[int(in_green)]
+        blue = self.gamma_table[int(in_blue)]
 
         return red, green, blue
 
