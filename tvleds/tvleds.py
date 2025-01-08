@@ -167,14 +167,14 @@ class AmbientLEDs:
         r2, g2, b2 = self.gamma_shift(I * self.colors[2].red, I * self.colors[2].green, I * self.colors[2].blue)
         r3, g3, b3 = self.gamma_shift(I * self.colors[3].red, I * self.colors[3].green, I * self.colors[3].blue)
 
-        print(f"0:{r0},{g0},{b0}")
-        print(f"1:{r1},{g1},{b1}")
-        print(f"2:{r2},{g2},{b2}")
-        print(f"3:{r3},{g3},{b3}")
+        #print(f"0:{r0},{g0},{b0}")
+        #print(f"1:{r1},{g1},{b1}")
+        #print(f"2:{r2},{g2},{b2}")
+        #print(f"3:{r3},{g3},{b3}")
 
         fill_num = self.light_mode() 
 
-        print("Fill Num:" + str(fill_num))
+        #print("Fill Num:" + str(fill_num))
 
         if fill_num == 1:
             self.pixels.fill((r0, g0, b0))

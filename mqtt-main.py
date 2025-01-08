@@ -26,7 +26,11 @@ def mqtt_status(client):
     global ambient_leds
 
     intensity = int(ambient_leds.set_intensity * 255)
-    print(f"intensity: {intensity}")
+    #print(f"intensity: {intensity}")
+
+    client.publish("TVLeds/light_1_/effect/status", current_effect, qos=0)
+    client.publish("TVLeds/settings/mood_time/status", str(ambient_leds.mood_period), qos=0)
+    client.publish("TVLeds/settings/pulse_time/status", str(ambient_leds.pulse_bpm), qos=0)
 
     for idx in range(len(ambient_leds.light_on)):
         # On/Off 
@@ -44,7 +48,7 @@ def mqtt_status(client):
 def trigger_thread_stop():
     global threads
 
-    print('Stopping all Threads...')
+    #print('Stopping all Threads...')
     
     stop_thread.set()
 
@@ -138,16 +142,13 @@ def task_rainbow():
 def begin_task(task):
     global threads, ambient_leds
 
+    trigger_thread_stop()
+    
     # Fill runs again in case another section of lights was activated
     if task == 'Fill':
         ambient_leds.fill()
-        return
 
-    print("here1")
-    trigger_thread_stop()
-
-    print("here2")
-    if task == 'Off':
+    elif task == 'Off':
         ambient_leds.clear_leds()
     
     elif task == 'Mood':
@@ -194,7 +195,7 @@ def on_connect(client, userdata, flags, reason_code, properties):
 
 def on_message(client, userdata, msg):
     global ambient_leds, current_effect
-    print(msg.topic+" "+str(msg.payload))
+    #print(msg.topic+" "+str(msg.payload))
     payload_str = msg.payload.decode("utf-8")
 
     skip_task = False
@@ -234,7 +235,7 @@ def on_message(client, userdata, msg):
     elif (msg.topic == "TVLeds/light_1/brightness/set" or msg.topic == "TVLeds/light_2/brightness/set" or 
           msg.topic == "TVLeds/light_3/brightness/set" or msg.topic == "TVLeds/light_4/brightness/set"):
         light_brightness = int(payload_str) / 255.0 
-        print(f"set brightness to {light_brightness}")
+        #print(f"set brightness to {light_brightness}")
         ambient_leds.set_intensity = light_brightness
 
     elif msg.topic == "TVLeds/light_1/rgb/set":
@@ -267,10 +268,15 @@ def on_message(client, userdata, msg):
 
     elif msg.topic == "TVLeds/settings/mood_time/set":
         mood_time = int(payload_str)
-        ambient_leds.mood_period = mood_time
+        if ambient_leds.mood_period != mood_time:
+            ambient_leds.mood_period = mood_time
+            client.publish("TVLeds/settings/mood_time/status", str(mood_time), qos=0)
 
     elif msg.topic == "TVLeds/settings/pulse_time/set":
         pulse_bpm = int(payload_str)
+        if ambient_leds.pulse_bpm != pulse_bpm:
+            ambient_leds.pulse_bpm = pulse_bpm
+            client.publish("TVLeds/settings/pulse_time/status", str(pulse_bpm), qos=0)
 
     else:
         print("Unhandled Message!")
